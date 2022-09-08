@@ -2,6 +2,10 @@ const express = require('express');
 const app = express();
 const fs = require('fs');
  
+const bodyParser = require('body-parser')
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: true }))
+
 app.get('/', (req, res) => {
   res
     .status(200)
@@ -12,7 +16,7 @@ app.get('/', (req, res) => {
 const token = "ROwNceprOpAINgRa"
  
 app.get('/webhooks',  (req, res) => {
-    console.log(req);
+    // console.log(req);
     if (
         req.query['hub.mode'] == 'subscribe' &&
         req.query['hub.verify_token'] == token
@@ -25,6 +29,7 @@ app.get('/webhooks',  (req, res) => {
 
 app.post('/webhooks', async (req, res) => {
   let body = req.body;
+  console.log(body);
   await fs.promises.writeFile(__dirname + '/test.json', JSON.stringify(body));
 });
 
