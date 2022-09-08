@@ -23,8 +23,13 @@ app.get('/webhooks',  (req, res) => {
     }
 });
 
+app.post('/webhooks', async (req, res) => {
+  let body = req.body;
+  await fs.promises.writeFile(__dirname + '/test.json', JSON.stringify(body));
+});
+
 // Accepts POST requests at /webhook endpoint
-app.post("/webhook", (req, res) => {
+app.post("/webhook", async (req, res) => {
   // Parse the request body from the POST
   let body = req.body;
   await fs.promises.writeFile(__dirname + '/test.json', JSON.stringify(body));
