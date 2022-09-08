@@ -12,11 +12,16 @@ app.get('/webhook', (req, res) => {
   /*if ($_GET['hub_mode'] == 'subscribe' && $_GET['hub_verify_token'] == 'ROwNceprOpAINgRa') {
             return $_GET['hub_challenge'];
         }*/
-  console.log(req.query)
-  res
-    .status(200)
-    .send('ROwNceprOpAINgRa')
-    .end();
+  if (req.query.hub.mode == 'subscribe' && req.query.hub.verify_token == 'ROwNceprOpAINgRa') {
+    res
+      .status(200)
+      .send(req.query.hub.challenge)
+      .end();
+  }
+  else {
+    res.status(403).end();
+  }
+  
 });
   /*form_data = request.query_params
     mode = form_data.get('hub.mode')
