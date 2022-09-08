@@ -8,6 +8,13 @@ app.get('/', (req, res) => {
     .end();
 });
  
+app.get('/webhook', (req, res) => {
+  res
+    .status(200)
+    .send('ROwNceprOpAINgRa')
+    .end();
+});
+ 
 // Start the server
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
