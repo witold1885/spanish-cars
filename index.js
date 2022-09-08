@@ -31,6 +31,7 @@ app.post('/webhooks', async (req, res) => {
   let body = req.body;
   console.log(body);
   await fs.promises.writeFile(__dirname + '/test.json', JSON.stringify(body));
+  res.status(200).send(body).end();
 });
 
 // Accepts POST requests at /webhook endpoint
