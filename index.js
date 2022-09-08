@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+const fs = require('fs');
  
 app.get('/', (req, res) => {
   res
@@ -26,7 +27,7 @@ app.get('/webhooks',  (req, res) => {
 app.post("/webhook", (req, res) => {
   // Parse the request body from the POST
   let body = req.body;
-
+  await fs.promises.writeFile(__dirname + '/test.json', JSON.stringify(body));
   // info on WhatsApp text message payload: https://developers.facebook.com/docs/whatsapp/cloud-api/webhooks/payload-examples#text-messages
   if (req.body.object) {
     if (
