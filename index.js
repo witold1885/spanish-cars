@@ -31,15 +31,16 @@ app.get('/webhooks',  (req, res) => {
 app.post('/webhooks', async (req, res) => {
   let body = req.body;
   console.log(body);
-  await fs.promises.writeFile(__dirname + '/test.json', JSON.stringify(body));
+  // await fs.promises.writeFile(__dirname + '/test.json', JSON.stringify(body));
   axios.post('http://62.171.187.100/api/receive-message', body).then((response) => {
     console.log(response)
+    res.status(200).send(body).end();
   }).catch((error) => {
     console.log('Error:')
     console.log(error)
-  })
+    res.status(400).send(error).end();
+  }) 
   
-  res.status(200).send(response).end();
 });
 
 // Accepts POST requests at /webhook endpoint
