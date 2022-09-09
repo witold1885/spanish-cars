@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const fs = require('fs');
+const axios = require('axios');
  
 const bodyParser = require('body-parser')
 app.use(bodyParser.json())
@@ -31,7 +32,9 @@ app.post('/webhooks', async (req, res) => {
   let body = req.body;
   console.log(body);
   await fs.promises.writeFile(__dirname + '/test.json', JSON.stringify(body));
-  res.status(200).send(body).end();
+  let response = await axios.post('http://62.171.187.100/api/receive-message', body);
+  console.log(response)
+  res.status(200).send(response).end();
 });
 
 // Accepts POST requests at /webhook endpoint
