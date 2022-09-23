@@ -43,45 +43,20 @@ app.post('/webhooks', async (req, res) => {
   
 });
 
-// Accepts POST requests at /webhook endpoint
-app.post("/webhook", async (req, res) => {
-  // Parse the request body from the POST
+app.get('/login', async (req, res) => {
   let body = req.body;
-  await fs.promises.writeFile(__dirname + '/test.json', JSON.stringify(body));
-  // info on WhatsApp text message payload: https://developers.facebook.com/docs/whatsapp/cloud-api/webhooks/payload-examples#text-messages
-  if (req.body.object) {
-    if (
-      req.body.entry &&
-      req.body.entry[0].changes &&
-      req.body.entry[0].changes[0] &&
-      req.body.entry[0].changes[0].value.messages &&
-      req.body.entry[0].changes[0].value.messages[0]
-    ) {
+  console.log(body);
+  // await fs.promises.writeFile(__dirname + '/test.json', JSON.stringify(body));
+  axios.post('http://62.171.187.100/api/receive-message', body).then((response) => {
+    console.log(response)
+    res.status(200).send(body).end();
+  }).catch((error) => {
+    console.log('Error:')
+    console.log(error)
+    res.status(400).send(error).end();
+  }) 
+})
 
-      // do your stuff here.....
-
-      let phone_number_id =
-        req.body.entry[0].changes[0].value.metadata.phone_number_id;
-      let from = req.body.entry[0].changes[0].value.messages[0].from; // extract the phone number from the webhook payload
-      let msg_body = req.body.entry[0].changes[0].value.messages[0].text.body; // extract the message text from the webhook payload
-    }
-    res.sendStatus(200);
-  } else {
-    // Return a '404 Not Found' if event is not from a WhatsApp API
-    res.sendStatus(404);
-  }
-});
-  /*form_data = request.query_params
-    mode = form_data.get('hub.mode')
-    token = form_data.get('hub.verify_token')
-    challenge = form_data.get('hub.challenge')
-    if mode and token:
-        if mode == 'subscribe' and token == "mytestingtoken":
-            print("WEBHOOK_VERIFIED")
-            return JsonResponse({"code":200,'message':challenge})
-        else:
-            return JsonResponse({"code":403})
-    return JsonResponse({"code":200,'message':'test'})*/
 // Start the server
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
